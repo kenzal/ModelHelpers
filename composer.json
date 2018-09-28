@@ -1,0 +1,24 @@
+{
+    "name": "kenzal/model-helpers",
+    "description": "Helper Library for Eloquent Models",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "J. Kenzal Hunter, Sr",
+            "email": "kenzal@ksavalon.net"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kenzal\\ModelHelpers\\": "src/"
+        }
+    },
+    "require-dev": {
+        "illuminate/database": "^5.8@dev"
+    }
+}
