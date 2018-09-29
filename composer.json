@@ -19,6 +19,12 @@
         }
     },
     "require-dev": {
-        "illuminate/database": "^5.8@dev"
+        "illuminate/database": "^5.8@dev",
+        "phpunit/phpunit": "^7.4@dev"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kenzal\\ModelHelpers\\Tests": "tests/"
+        }
     }
 }
