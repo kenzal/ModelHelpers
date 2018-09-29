@@ -15,5 +15,5 @@ interface ReadOnlyableModel
     /**
      * @return $this
      */
-    public function markReadOnly(): self;
+    public function markReadOnly();
 }

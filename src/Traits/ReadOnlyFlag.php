@@ -30,7 +30,7 @@ trait ReadOnlyFlag
         }
     }
 
-    public function isReadOnly()
+    public function isReadOnly(): bool
     {
         return (bool)$this->readOnlyFlag;
     }
