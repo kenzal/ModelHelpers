@@ -6,7 +6,7 @@
  * Time: 15:33
  */
 
-namespace Kenzal\ModelHelpers\Tests\Classes;
+namespace Kenzal\ModelHelpers\Tests\Classes\Models;
 
 class ReadOnlyMarked extends ReadOnlyDefault
 {

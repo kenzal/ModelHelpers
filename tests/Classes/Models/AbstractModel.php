@@ -6,11 +6,11 @@
  * Time: 15:33
  */
 
-namespace Kenzal\ModelHelpers\Tests\Classes;
+namespace Kenzal\ModelHelpers\Tests\Classes\Models;
 
 use Illuminate\Database\Schema\Blueprint;
 
-abstract class BaseModel extends \Illuminate\Database\Eloquent\Model
+abstract class AbstractModel extends \Illuminate\Database\Eloquent\Model
 {
     static function migrateUp()
     {

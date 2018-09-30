@@ -9,34 +9,23 @@
 namespace Kenzal\ModelHelpers\Tests\Unit\Traits;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
-use Illuminate\Support\Testing\Fakes\EventFake;
 use Kenzal\ModelHelpers\Exceptions\ReadOnlyException;
-use Kenzal\ModelHelpers\Tests\Classes\ReadOnlyDefault;
-use Kenzal\ModelHelpers\Tests\Classes\ReadOnlyMarked;
+use Kenzal\ModelHelpers\Tests\Classes\Models\ReadOnlyDefault;
+use Kenzal\ModelHelpers\Tests\Classes\Models\ReadOnlyMarked;
 use PHPUnit\Framework\TestCase;
 
 class ReadOnlyFlagTest extends TestCase
 {
     use \Kenzal\ModelHelpers\Tests\Helpers\TestDB;
-
-    /** @var EventFake */
-    protected $dispatcher;
-    /** @var \Illuminate\Events\Dispatcher */
-    protected $primaryDispatcher;
+    use \Kenzal\ModelHelpers\Tests\Helpers\TestEvents;
 
     public function setUp()
     {
         parent::setUp();
-        $this->primaryDispatcher = new class extends \Illuminate\Events\Dispatcher {
-            public function forgetAll() {
-                $this->listeners = [];
-                $this->wildcards = [];
-            }
-        };
-        $this->dispatcher = new EventFake($this->primaryDispatcher);
+
         EloquentModel::setEventDispatcher($this->dispatcher);
         $this->migrateTables();
-        $this->primaryDispatcher->forgetAll();
+        $this->forgetAllListeners();
         EloquentModel::clearBootedModels();
     }
 
@@ -56,7 +45,7 @@ class ReadOnlyFlagTest extends TestCase
 
     public function testSavingListenerIsSetOnBoot()
     {
-        $savingEvent = $this->getEvent(ReadOnlyDefault::class);
+        $savingEvent = $this->getEvent(ReadOnlyDefault::class, 'saving');
 //        var_dump($this->primaryDispatcher->getListeners($savingEvent)); die;
         $this->assertFalse($this->dispatcher->hasListeners($savingEvent));
         new ReadOnlyDefault;
@@ -65,19 +54,14 @@ class ReadOnlyFlagTest extends TestCase
 
     public function testListenerReturnsFalseOnReadOnly()
     {
-        $event = $this->getEvent(ReadOnlyDefault::class);
+        $event = $this->getEvent(ReadOnlyDefault::class, 'saving');
         $model = new ReadOnlyDefault;
         /** @var \Closure $callable */
-        $listener = array_first($this->primaryDispatcher->getListeners($event));
+        $listener = array_first($this->getListeners($event));
         $this->assertNull($listener($event, [$model]));
         $model->markReadOnly();
         $this->expectException(ReadOnlyException::class);
         $listener($event, [$model]);
-    }
-
-    protected function getEvent(string $class): string
-    {
-        return 'eloquent.saving: ' . $class;
     }
 
     protected function migrateTables(): void

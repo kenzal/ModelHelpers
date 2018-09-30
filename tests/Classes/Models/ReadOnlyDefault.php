@@ -6,11 +6,11 @@
  * Time: 15:33
  */
 
-namespace Kenzal\ModelHelpers\Tests\Classes;
+namespace Kenzal\ModelHelpers\Tests\Classes\Models;
 
 use Kenzal\ModelHelpers\Contracts\ReadOnlyableModel;
 
-class ReadOnlyDefault extends BaseModel implements ReadOnlyableModel
+class ReadOnlyDefault extends AbstractModel implements ReadOnlyableModel
 {
     use \Kenzal\ModelHelpers\Traits\ReadOnlyFlag;
 

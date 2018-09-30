@@ -19,12 +19,16 @@ trait TriggeredMethods
         //'setCalculatedFields' => 'saving',
     ];
 
-    protected static function bootTriggeredMethods() {
+    protected static function bootTriggeredMethods()
+    {
+        $class = static::class;
         foreach (static::$triggerMethods as $method => $trigger) {
-            if (method_exists(static::class, $method) && is_callable(static::class . "::{$method}")) {
-                static::$trigger(
-                    function ($model) use ($method) {
-                        static::$method($model);
+            if (method_exists($class, $method)) {
+                $result = forward_static_call(
+                    [$class, 'registerModelEvent'],
+                    $trigger,
+                    function ($model) use ($class, $method) {
+                        forward_static_call([$class, $method], $model);
                     }
                 );
             }
